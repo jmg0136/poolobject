@@ -55,7 +55,21 @@ public class ReusablePoolTest {
 	 */
 	@Test
 	public void testAcquireReusable() {
-		fail("Not yet implemented");
+		Reusable o1 = null, o2 = null, o3 = null; // Creamos tres objetos vacíos
+		try {
+			o1 = pool.acquireReusable();		// Solicitamos el primero
+			assertNotNull(o1);					// Comprobamos que ya no sea nulo
+			assertTrue(o1 instanceof Reusable);	// Comprobamos el tipo
+			
+			o2 = pool.acquireReusable();					// Solicitamos el segundo
+			assertNotNull(o2);								// Comprobamos que ya no sea nulo
+			assertTrue(o2 instanceof Reusable);				// Comprobamos el tipo
+			assertFalse(o1.hashCode() == o2.hashCode());	// Comprobamos que no sean el mismo objeto
+			
+			o3 = pool.acquireReusable(); // Solicitamos un tercero inexistente para forzar el fallo
+		} catch (NotFreeInstanceException e) {
+			assertNull(o3); // Comprobamos si el objeto existe, es decir, no es nulo
+		}
 	}
 
 	/**
