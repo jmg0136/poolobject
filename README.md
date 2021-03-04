@@ -24,6 +24,12 @@ Objetivos específicos
 - Comprender, aplicar y analizar técnicas de medición sobre entidades de productos software relacionados con conjuntos de pruebas de software
 - Comprender, aplicar y analizar medidas relacionadas sobre entidades de proceso y recursos de prueba del software
 
+Enunciado
+=========
+
+En la práctica se va simular un pequeño desarrollo de un producto software para realizar mediciones sobre él.
+El objetivo es establecer un caso de estudio que sirva para caracterizar y evaluar tanto el producto desarrollado como el proceso seguido.
+
 Preguntas
 =========
 
