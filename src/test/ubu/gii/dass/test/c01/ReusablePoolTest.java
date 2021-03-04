@@ -55,7 +55,8 @@ public class ReusablePoolTest {
 	 */
 	@Test
 	public void testAcquireReusable() {
-		Reusable o1 = null, o2 = null, o3 = null; // Creamos tres objetos vac�os
+		Reusable o1 = null, o2 = null, o3 = null; // Creamos tres objetos vacíos
+		
 		try {
 			o1 = pool.acquireReusable();		// Solicitamos el primero
 			assertNotNull(o1);					// Comprobamos que ya no sea nulo
@@ -66,7 +67,7 @@ public class ReusablePoolTest {
 			assertTrue(o2 instanceof Reusable);				// Comprobamos el tipo
 			assertFalse(o1.hashCode() == o2.hashCode());	// Comprobamos que no sean el mismo objeto
 			
-			o3 = pool.acquireReusable(); // Solicitamos un tercero inexistente para forzar el fallo
+			o3 = pool.acquireReusable(); // Solicitamos un tercero inexistente para forzar NotFreeInstanceException
 		} catch (NotFreeInstanceException e) {
 			assertNull(o3); // Comprobamos si el objeto existe, es decir, no es nulo
 		}
@@ -74,10 +75,27 @@ public class ReusablePoolTest {
 
 	/**
 	 * Test method for {@link ubu.gii.dass.c01.ReusablePool#releaseReusable(ubu.gii.dass.c01.Reusable)}.
+	 * @throws NotFreeInstanceException 
 	 */
 	@Test
-	public void testReleaseReusable() {
-		fail("Not yet implemented");
+	public void testReleaseReusable() throws NotFreeInstanceException {
+		Reusable o1 = null, o2 = null, o3 = null; // Creamos tres objetos vacíos
+		int hashId = 0;
+		
+		try {
+			o1 = pool.acquireReusable();	// Solicitamos el primero
+			hashId = o1.hashCode();			// Guardamos su identificador
+			pool.releaseReusable(o1);		// Liberamos el objeto
+			
+			o2 = pool.acquireReusable();			// Solicitamos el segundo
+			assertTrue(hashId == o2.hashCode());	// Comprobamos que coinciden
+			
+			pool.releaseReusable(o2);	// Liberamos el objeto
+			pool.releaseReusable(o2);	// Forzamos la excepción DuplicatedInstanceException
+		
+		} catch (DuplicatedInstanceException e){
+			assertTrue(hashId == o2.hashCode()); // Comprobamos que efectivamente es la misma instancia
+		}
 	}
 
 }
